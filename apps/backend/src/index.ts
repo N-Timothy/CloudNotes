@@ -1,17 +1,21 @@
+import 'reflect-metadata'
+
 import express from 'express'
 
 import type {Express, Request, Response} from 'express'
 
-import {setupDB} from './db'
+import dataSource from './db'
+import {User} from './models/user.model'
 
 const app: Express = express()
 const port = process.env.PORT || 3000
 
-setupDB()
+dataSource
   .initialize()
   .then(() => {
-    app.get('/', (req: Request, res: Response) => {
-      res.send('Express + TypeScript Server')
+    app.get('/', async (req: Request, res: Response) => {
+      let users = await dataSource.getRepository(User).find()
+      res.send(users)
     })
 
     app.listen(port, () => {

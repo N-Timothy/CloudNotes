@@ -20,7 +20,8 @@ module.exports = {
   rules: {
     'no-var': ERROR,
     semi: OFF,
-    indent: [ERROR, 2, {SwitchCase: 1}],
+    'prefer-const': OFF,
+    // indent: [ERROR, 2, {SwitchCase: 1}],
     'no-multi-spaces': ERROR,
     'space-in-parens': ERROR,
     'no-multiple-empty-lines': ERROR,
