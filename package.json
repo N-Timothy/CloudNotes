@@ -1,0 +1,27 @@
+{
+  "private": true,
+  "scripts": {
+    "build": "turbo run build --parallel",
+    "dev": "turbo run dev --parallel",
+    "start": "turbo run start --parallel",
+    "lint": "turbo run lint",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+  },
+  "packageManager": "pnpm@7.1.7",
+  "lint-staged": {
+    "*.{ts,tsx,md,mdx,js,jsx}": [
+      "prettier --write"
+    ]
+  },
+  "simple-git-hooks": {
+    "pre-commit": "pnpm exec lint-staged"
+  },
+  "devDependencies": {
+    "eslint": "8.16.0",
+    "eslint-config-custom": "workspace:*",
+    "lint-staged": "^13.0.0",
+    "prettier": "^2.6.2",
+    "simple-git-hooks": "^2.8.0",
+    "turbo": "^1.2.16"
+  }
+}

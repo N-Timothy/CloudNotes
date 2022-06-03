@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "display": "Express",
+  "extends": "./base.json",
+  "compilerOptions": {
+    "lib": ["DOM", "DOM.Iterable", "ES2021"],
+    "types": ["vitest/globals"],
+    "isolatedModules": true,
+    "esModuleInterop": true,
+    "jsx": "react",
+    "module": "ES2020",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "target": "ES2019",
+    "strict": true,
+    "baseUrl": ".",
+    "paths": {
+      "~/*": ["./src/*"]
+    },
+    "skipLibCheck": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+
+    "noEmit": true
+  },
+  "include": ["src", "backend-env.d.ts"],
+  "exclude": ["node_modules"]
+}
