@@ -1,6 +1,7 @@
 {
   "private": true,
   "scripts": {
+    "postinstall": "rm -rf .git/hooks && git config core.hooksPath .git/hooks && simple-git-hooks install",
     "build": "turbo run build --parallel",
     "dev": "turbo run dev --parallel",
     "start": "turbo run start --parallel",

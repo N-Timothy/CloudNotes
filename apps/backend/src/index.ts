@@ -5,7 +5,7 @@ import express from 'express'
 import type {Express, Request, Response} from 'express'
 
 import dataSource from './db'
-import {User} from './models/user.model'
+import {User} from './models/User'
 
 const app: Express = express()
 const port = process.env.PORT || 3000
