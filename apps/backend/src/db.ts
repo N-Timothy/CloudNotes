@@ -1,14 +1,16 @@
 import {DataSource} from 'typeorm'
 
+import {env} from '~/env'
+
 const dataSource = new DataSource({
   type: 'postgres',
-  host: process.env.DB_HOST || 'localhost',
-  port: process.env.DB_PORT || 5432,
-  username: process.env.DB_USER || 'postgres',
-  password: process.env.DB_PASS || '',
-  database: process.env.DB_NAME || 'cloudnotes',
+  host: env.DB_HOST,
+  port: env.DB_PORT,
+  username: env.DB_USER,
+  password: env.DB_PASS,
+  database: env.DB_NAME,
   synchronize: false,
-  logging: process.env.NODE_ENV === 'development',
+  logging: env.ENVIRONMENT === 'development',
   entities: [`${__dirname}/models/**/*.{js,ts}`],
   migrations: ['migrations/**/*.ts'],
   subscribers: [`${__dirname}subscribers/**/*.{js,ts}`],

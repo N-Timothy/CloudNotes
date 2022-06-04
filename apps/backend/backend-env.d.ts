@@ -5,11 +5,14 @@ declare global {
     interface ProcessEnv {
       NODE_ENV: 'development' | 'production' | 'test'
 
-      PORT?: number
+      // server
+      HOST?: string
+      PORT?: string
+      HTTPS?: string
 
       // database
       DB_HOST?: string
-      DB_PORT?: number
+      DB_PORT?: string
       DB_USER?: string
       DB_PASS?: string
       DB_NAME?: string
