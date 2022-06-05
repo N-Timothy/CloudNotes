@@ -1,19 +1,17 @@
-import {DataSource} from 'typeorm'
+import {Sequelize} from 'sequelize-typescript'
 
-import {env} from '~/env'
+import {env} from './env'
 
-const dataSource = new DataSource({
-  type: 'postgres',
-  host: env.DB_HOST,
-  port: env.DB_PORT,
-  username: env.DB_USER,
-  password: env.DB_PASS,
-  database: env.DB_NAME,
-  synchronize: false,
-  logging: env.ENVIRONMENT === 'development',
-  entities: [`${__dirname}/models/**/*.{js,ts}`],
-  migrations: ['migrations/**/*.ts'],
-  subscribers: [`${__dirname}subscribers/**/*.{js,ts}`],
+const sequelize = new Sequelize(env.DATABASE_URL, {
+  repositoryMode: true,
+  models: [__dirname + '/models/**/*.ts'],
+  // logging: console.log,
+  //   modelMatch: (filename, member) => {
+  //     return (
+  //       filename.substring(0, filename.indexOf('.model')) ===
+  //       member.toLowerCase()
+  //     )
+  //   },
 })
 
-export default dataSource
+export {sequelize}

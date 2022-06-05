@@ -1,33 +1,32 @@
 import {
-  PrimaryGeneratedColumn,
-  CreateDateColumn,
-  UpdateDateColumn,
-  BeforeUpdate,
-  BeforeInsert,
-} from 'typeorm'
+  CreatedAt,
+  UpdatedAt,
+  Column,
+  PrimaryKey,
+  IsUUID,
+  DataType,
+  Model,
+  Default,
+} from 'sequelize-typescript'
+import {instanceToPlain} from 'class-transformer'
 
-abstract class BaseModel {
-  @PrimaryGeneratedColumn()
-  id!: number
+import type {ClassTransformOptions} from 'class-transformer'
 
-  @CreateDateColumn({
-    name: 'created_at',
-  })
+class BaseModel extends Model {
+  @IsUUID(4)
+  @PrimaryKey
+  @Default(DataType.UUIDV4)
+  @Column(DataType.UUID)
+  id!: string
+
+  @CreatedAt
   createdAt!: Date
 
-  @UpdateDateColumn({
-    name: 'updated_at',
-  })
+  @UpdatedAt
   updatedAt!: Date
 
-  @BeforeInsert()
-  createdDate() {
-    this.createdAt = new Date()
-  }
-
-  @BeforeUpdate()
-  updateDate() {
-    this.updatedAt = new Date()
+  serialize(opts?: ClassTransformOptions) {
+    return JSON.stringify(instanceToPlain(this, opts))
   }
 }
 

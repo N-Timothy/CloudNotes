@@ -1,14 +1,15 @@
 import 'reflect-metadata'
 
-import express from 'express'
+import Koa from 'koa'
+import Router from '@koa/router'
+import mount from 'koa-mount'
 
-import type {Express, Request, Response} from 'express'
-
-import dataSource from './db'
-import {User} from './models/User'
+import routesApi from './routes/api'
 import {env} from './env'
 
-const app: Express = express()
+const app = new Koa()
+
+const router = new Router()
 
 async function checkEnv() {
   await env.validate().then(errors => {
@@ -27,12 +28,13 @@ async function checkEnv() {
 
 async function start() {
   await checkEnv()
-  await dataSource.initialize()
 
-  app.get('/', async (req: Request, res: Response) => {
-    let users = await dataSource.getRepository(User).find()
-    res.send(users)
+  router.get('/', async ctx => {
+    ctx.body = "Whatchu doin' here"
   })
+
+  app.use(router.routes()).use(router.allowedMethods())
+  app.use(mount('/api', routesApi))
 
   app.listen(env.PORT, env.HOST, () => {
     console.log(`⚡️[server]: Server is running at ${env.DOMAIN}`)

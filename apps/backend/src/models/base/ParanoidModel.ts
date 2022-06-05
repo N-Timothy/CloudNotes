@@ -1,11 +1,9 @@
-import {DeleteDateColumn} from 'typeorm'
+import {DeletedAt} from 'sequelize-typescript'
 
 import {BaseModel} from './BaseModel'
 
 abstract class ParanoidModel extends BaseModel {
-  @DeleteDateColumn({
-    name: 'deleted_at',
-  })
+  @DeletedAt
   deletedAt!: Date | null
 }
 

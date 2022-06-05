@@ -11,11 +11,12 @@ declare global {
       HTTPS?: string
 
       // database
-      DB_HOST?: string
-      DB_PORT?: string
-      DB_USER?: string
-      DB_PASS?: string
-      DB_NAME?: string
+      DATABASE_URL?: string
+      // DB_HOST?: string
+      // DB_PORT?: string
+      // DB_USER?: string
+      // DB_PASS?: string
+      // DB_NAME?: string
     }
   }
 }

@@ -1,39 +1,30 @@
-import 'reflect-metadata'
-import {
-  Entity,
-  Column,
-  Unique,
-  PrimaryGeneratedColumn,
-  BeforeInsert,
-} from 'typeorm'
+import {BeforeCreate, Column, Table} from 'sequelize-typescript'
 import {Length, IsEmail} from 'class-validator'
 import {Exclude} from 'class-transformer'
 import argon2 from 'argon2'
 
 import {ParanoidModel} from './base/ParanoidModel'
 
-@Entity('users')
-@Unique(['email'])
-export class User extends ParanoidModel {
-  @PrimaryGeneratedColumn()
-  id!: number
-
-  @Column()
+@Table
+class User extends ParanoidModel {
+  @Column
   @Length(2, 50)
   name!: string
 
-  @Column()
+  @Column
   @Length(4, 30)
   @IsEmail()
   email!: string
 
+  @Column
   @Exclude()
-  @Column()
   @Length(25, 100)
   password!: string
 
-  @BeforeInsert()
-  async hashPassword() {
-    this.password = await argon2.hash(this.password)
+  @BeforeCreate
+  static async makeUpperCase(instance: User) {
+    instance.password = await argon2.hash(instance.password)
   }
 }
+
+export {User}

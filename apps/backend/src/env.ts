@@ -55,41 +55,49 @@ class Environment {
     this.PORT
   }`
 
+  @IsNotEmpty()
+  @IsUrl({
+    require_tld: false,
+    protocols: ['postgres'],
+    require_protocol: true,
+  })
+  public DATABASE_URL = process.env.DATABASE_URL as string
+
   /**
    * Database hostname
    */
-  @IsNotEmpty()
-  @RequireProperties(['DB_PORT', 'DB_USER', 'DB_PASS', 'DB_NAME'])
-  public DB_HOST = process.env.DB_HOST as string
+  //  @IsNotEmpty()
+  //  @RequireProperties(['DB_PORT', 'DB_USER', 'DB_PASS', 'DB_NAME'])
+  //  public DB_HOST = process.env.DB_HOST as string
 
   /**
    * Database port
    */
-  @IsNotEmpty()
-  @IsNumber()
-  @RequireProperties(['DB_HOST', 'DB_USER', 'DB_PASS', 'DB_NAME'])
-  public DB_PORT = this.toNumber(process.env.DB_PORT, 5432)
+  // @IsNotEmpty()
+  // @IsNumber()
+  // @RequireProperties(['DB_HOST', 'DB_USER', 'DB_PASS', 'DB_NAME'])
+  // public DB_PORT = this.toNumber(process.env.DB_PORT, 5432)
 
-  /**
-   * Database username
-   */
-  @IsNotEmpty()
-  @RequireProperties(['DB_HOST', 'DB_PORT', 'DB_PASS', 'DB_NAME'])
-  public DB_USER = process.env.DB_USER as string
+  // /**
+  //  * Database username
+  //  */
+  // @IsNotEmpty()
+  // @RequireProperties(['DB_HOST', 'DB_PORT', 'DB_PASS', 'DB_NAME'])
+  // public DB_USER = process.env.DB_USER as string
 
-  /**
-   * Database password
-   */
-  @IsNotNullOrUndefined()
-  @RequireProperties(['DB_HOST', 'DB_PORT', 'DB_USER', 'DB_NAME'])
-  public DB_PASS = process.env.DB_PASS as string
+  // /**
+  //  * Database password
+  //  */
+  // @IsNotNullOrUndefined()
+  // @RequireProperties(['DB_HOST', 'DB_PORT', 'DB_USER', 'DB_NAME'])
+  // public DB_PASS = process.env.DB_PASS as string
 
-  /**
-   * Database name
-   */
-  @IsNotEmpty()
-  @RequireProperties(['DB_HOST', 'DB_PORT', 'DB_USER', 'DB_PASS'])
-  public DB_NAME = process.env.DB_NAME as string
+  // /**
+  //  * Database name
+  //  */
+  // @IsNotEmpty()
+  // @RequireProperties(['DB_HOST', 'DB_PORT', 'DB_USER', 'DB_PASS'])
+  // public DB_NAME = process.env.DB_NAME as string
 
   private toNumber(value: string | undefined, def: number) {
     let val = value ? parseInt(value, 10) : def

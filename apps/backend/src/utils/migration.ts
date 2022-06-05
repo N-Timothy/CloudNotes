@@ -1,43 +1,50 @@
-import {TableColumn} from 'typeorm'
+// import {TableColumn} from 'typeorm'
+import Sequelize from 'sequelize'
+
+import type {
+  CreationAttributes,
+  Model,
+  ModelAttributes,
+} from 'sequelize'
 
 interface AddTimestampsOptions {
-  deleted_at: boolean
+  deletedAt: boolean
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
-function addTimestamps(
+function addTimestamps<
+  M extends Model = Model,
+  Attributes = ModelAttributes<M, CreationAttributes<M>>,
+>(
   options: AddTimestampsOptions = {
-    deleted_at: true,
+    deletedAt: true,
   },
-): TableColumn[] {
-  let {deleted_at} = options
-  let columns: TableColumn[] = []
-  columns.push(
-    new TableColumn({
-      name: 'created_at',
-      type: 'timestamp',
-      isNullable: false,
-      default: 'now()',
-    }),
-    new TableColumn({
-      name: 'updated_at',
-      type: 'timestamp',
-      isNullable: false,
-      default: 'now()',
-    }),
-  )
+): Attributes {
+  let {deletedAt} = options
 
-  if (deleted_at) {
-    columns.push(
-      new TableColumn({
-        name: 'deleted_at',
-        type: 'timestamp',
-        isNullable: true,
-      }),
-    )
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let columns: any = {
+    createdAt: {
+      allowNull: false,
+      type: Sequelize.DATE,
+    },
+    updatedAt: {
+      allowNull: false,
+      type: Sequelize.DATE,
+    },
   }
 
-  return columns
+  if (deletedAt) {
+    columns = {
+      ...columns,
+      deletedAt: {
+        allowNull: true,
+        type: Sequelize.DATE,
+      },
+    }
+  }
+
+  return columns as Attributes
 }
 
 export {addTimestamps}
