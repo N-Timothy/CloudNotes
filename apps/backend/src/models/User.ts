@@ -1,4 +1,10 @@
-import {BeforeCreate, Column, Table} from 'sequelize-typescript'
+import {
+  BeforeBulkUpdate,
+  BeforeCreate,
+  BeforeUpdate,
+  Column,
+  Table,
+} from 'sequelize-typescript'
 import {Length, IsEmail} from 'class-validator'
 import {Exclude} from 'class-transformer'
 import argon2 from 'argon2'
@@ -23,6 +29,13 @@ class User extends ParanoidModel {
 
   @BeforeCreate
   static async makeUpperCase(instance: User) {
+    console.log(instance)
+    instance.password = await argon2.hash(instance.password)
+  }
+
+  // @BeforeBulkUpdate
+  @BeforeUpdate
+  static async hashUpdatedPassword(instance: User) {
     instance.password = await argon2.hash(instance.password)
   }
 }
