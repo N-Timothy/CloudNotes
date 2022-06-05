@@ -1,4 +1,3 @@
-// import {TableColumn} from 'typeorm'
 import Sequelize from 'sequelize'
 
 import type {
