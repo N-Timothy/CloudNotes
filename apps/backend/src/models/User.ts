@@ -1,5 +1,4 @@
 import {
-  BeforeBulkUpdate,
   BeforeCreate,
   BeforeUpdate,
   Column,
@@ -28,14 +27,8 @@ class User extends ParanoidModel {
   password!: string
 
   @BeforeCreate
-  static async makeUpperCase(instance: User) {
-    console.log(instance)
-    instance.password = await argon2.hash(instance.password)
-  }
-
-  // @BeforeBulkUpdate
   @BeforeUpdate
-  static async hashUpdatedPassword(instance: User) {
+  static async hashPassword(instance: User) {
     instance.password = await argon2.hash(instance.password)
   }
 }

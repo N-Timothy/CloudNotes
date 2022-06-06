@@ -24,7 +24,7 @@ function setup() {
 
     try {
       // check if user exist then create
-      const [data, created] = await userRepository.findOrCreate({
+      let [, created] = await userRepository.findOrCreate({
         where: {email: ctx.request.body.email},
         defaults: ctx.request.body,
       })
