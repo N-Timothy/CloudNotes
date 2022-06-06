@@ -23,17 +23,45 @@ function setup() {
     //   - if valid, create user
 
     try {
-      // check if user already exists
-      await userRepository.create(ctx.request.body)
+      // check if user exist then create
+      let [, created] = await userRepository.findOrCreate({
+        where: {email: ctx.request.body.email},
+        defaults: ctx.request.body,
+      })
+
+      if (!created) {
+        throw 'email_exist'
+      }
+
+      ctx.body = 'OK'
+    } catch (e) {
+      ctx.body = e === 'email_exist' ? 'EMAIL EXIST' : 'ERROR'
+    }
+  })
+
+  // update user
+  router.put('/', async ctx => {
+    try {
+      await userRepository.update(ctx.request.body, {
+        where: {email: ctx.request.body.email},
+        individualHooks: true,
+      })
       ctx.body = 'OK'
     } catch (e) {
       ctx.body = 'ERROR'
     }
   })
 
-  // update user
-
   // delete user
+
+  router.delete('/:id', async ctx => {
+    try {
+      await userRepository.destroy({where: {id: ctx.params.id}})
+      ctx.body = 'OK'
+    } catch (e) {
+      ctx.body = 'ERROR'
+    }
+  })
 
   // return HTTP status code
   // data (2XX)
