@@ -2,6 +2,7 @@ import Koa, {HttpError} from 'koa'
 import bodyparser from 'koa-bodyparser'
 
 import {usersRouter} from './users'
+import {outRouter} from './out'
 
 const app = new Koa()
 
@@ -22,6 +23,7 @@ app.use(async function jsonErrorHandler(ctx, next) {
 })
 
 app.use(usersRouter.routes())
+app.use(outRouter.routes())
 app.use(usersRouter.allowedMethods())
 
 export default app
