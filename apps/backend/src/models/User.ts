@@ -4,7 +4,7 @@ import {
   Column,
   Table,
 } from 'sequelize-typescript'
-import {Exclude} from 'class-transformer'
+import {Exclude, Expose} from 'class-transformer'
 import argon2 from 'argon2'
 import {z} from 'zod'
 
@@ -13,16 +13,18 @@ import {
   ParanoidModelValidation,
 } from './base/ParanoidModel'
 
+@Exclude()
 @Table
 class User extends ParanoidModel {
+  @Expose()
   @Column
   name!: string
 
+  @Expose()
   @Column
   email!: string
 
   @Column
-  @Exclude()
   password!: string
 
   @BeforeCreate

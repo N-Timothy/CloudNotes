@@ -25,7 +25,8 @@
     "# db": "-------------------------------------------------------------------------------------",
     "db:new-migration": "sequelize migration:create",
     "db:migrate": "sequelize db:migrate",
-    "db:rollback": "sequelize db:migrate:undo"
+    "db:rollback": "sequelize db:migrate:undo",
+    "db:reset": "sequelize db:migrate:undo:all && sequelize db:migrate"
   },
   "dependencies": {
     "@koa/cors": "^3.3.0",

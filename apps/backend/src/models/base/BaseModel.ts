@@ -8,26 +8,34 @@ import {
   Model,
   Default,
 } from 'sequelize-typescript'
-import {instanceToPlain} from 'class-transformer'
+import {Exclude, Expose, instanceToPlain} from 'class-transformer'
 import {z} from 'zod'
 
 import type {ClassTransformOptions} from 'class-transformer'
 
+@Exclude()
 class BaseModel extends Model {
+  @Expose()
   @IsUUID(4)
   @PrimaryKey
   @Default(DataType.UUIDV4)
   @Column(DataType.UUID)
   id!: string
 
+  @Expose()
   @CreatedAt
   createdAt!: Date
 
+  @Expose()
   @UpdatedAt
   updatedAt!: Date
 
   public serialize(opts?: ClassTransformOptions) {
-    return JSON.stringify(instanceToPlain(this, opts))
+    return instanceToPlain(this, {
+      ...opts,
+      excludeExtraneousValues: true,
+      strategy: 'excludeAll',
+    })
   }
 }
 

@@ -9,7 +9,8 @@
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "db:new-migration": "turbo run db:new-migration --filter=@cloudnotes/backend",
     "db:migrate": "turbo run db:migrate --filter=@cloudnotes/backend",
-    "db:rollback": "turbo run db:rollback --filter=@cloudnotes/backend"
+    "db:rollback": "turbo run db:rollback --filter=@cloudnotes/backend",
+    "db:reset": "turbo run db:reset --filter=@cloudnotes/backend"
   },
   "packageManager": "pnpm@7.1.7",
   "lint-staged": {

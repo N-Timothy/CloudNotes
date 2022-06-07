@@ -1,9 +1,12 @@
+import {Exclude, Expose} from 'class-transformer'
 import {DeletedAt} from 'sequelize-typescript'
 import {z} from 'zod'
 
 import {BaseModel, BaseModelValidation} from './BaseModel'
 
+@Exclude()
 abstract class ParanoidModel extends BaseModel {
+  @Expose()
   @DeletedAt
   deletedAt!: Date | null
 }

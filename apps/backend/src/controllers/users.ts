@@ -1,5 +1,6 @@
 import {z} from 'zod'
 import {getReasonPhrase, StatusCodes} from 'http-status-codes'
+import {instanceToPlain, serialize} from 'class-transformer'
 
 import type {User} from '~/models/User'
 import {UserValidation} from '~/models/User'
@@ -49,7 +50,7 @@ class UserController {
       return successResponse(
         context,
         {
-          data,
+          data: data.serialize(),
         },
         StatusCodes.CREATED,
       )
