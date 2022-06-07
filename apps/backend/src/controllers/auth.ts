@@ -13,7 +13,7 @@ import {ResourceExistError} from '~/errors/resource-exist'
 import {ResourceNotExistError} from '~/errors/resource-not-exist'
 import {PasswordNotMatch} from '~/errors/password-not-match'
 
-class OutController {
+class AuthController {
   public constructor(private userRepository: Repository<User>) {}
 
   public async login(context: Context) {
@@ -105,4 +105,4 @@ class OutController {
   }
 }
 
-export {OutController}
+export {AuthController}
