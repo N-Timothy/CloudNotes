@@ -1,6 +1,5 @@
 import {z} from 'zod'
 import {getReasonPhrase, StatusCodes} from 'http-status-codes'
-import {instanceToPlain, serialize} from 'class-transformer'
 
 import type {User} from '~/models/User'
 import {UserValidation} from '~/models/User'
@@ -10,7 +9,7 @@ import {errorResponse, successResponse} from '~/utils/response'
 import type {Context} from 'koa'
 import type {Repository} from 'sequelize-typescript'
 
-import {ResourceExist} from '~/exceptions/resource-exist'
+import {ResourceExistError} from '~/errors/resource-exist'
 
 function refinePasswordConfirmationValidation(
   schema: typeof UserValidation.rulesSchema,
@@ -44,7 +43,7 @@ class UserController {
       })
 
       if (!created) {
-        throw new ResourceExist('Email has already been taken')
+        throw new ResourceExistError('Email has already been taken')
       }
 
       return successResponse(
@@ -55,17 +54,11 @@ class UserController {
         StatusCodes.CREATED,
       )
     } catch (e) {
-      if (e instanceof z.ZodError) {
-        return errorResponse(
-          context,
-          {
-            error: e,
-          },
-          StatusCodes.BAD_REQUEST,
-        )
-      }
-
-      if (e instanceof Error) {
+      if (
+        e instanceof z.ZodError ||
+        e instanceof ResourceExistError ||
+        e instanceof Error
+      ) {
         return errorResponse(
           context,
           {
