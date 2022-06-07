@@ -25,5 +25,6 @@ app.use(async function jsonErrorHandler(ctx, next) {
 app.use(usersRouter.routes())
 app.use(authRouter.routes())
 app.use(usersRouter.allowedMethods())
+app.use(authRouter.allowedMethods())
 
 export default app
