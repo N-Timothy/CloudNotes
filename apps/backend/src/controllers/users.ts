@@ -10,6 +10,7 @@ import type {Context} from 'koa'
 import type {Repository} from 'sequelize-typescript'
 
 import {ResourceExistError} from '~/errors/resource-exist'
+import {ResourceNotExistError} from '~/errors/resource-not-exist'
 
 function refinePasswordConfirmationValidation(
   schema: typeof UserValidation.rulesSchema,
@@ -26,9 +27,25 @@ function refinePasswordConfirmationValidation(
 class UserController {
   public constructor(private usersRepository: Repository<User>) {}
 
-  public async getAll(ctx: Context) {
-    let users = await this.usersRepository.findAll()
-    ctx.body = users
+  public async getAll(context: Context) {
+    try {
+      let users = await this.usersRepository.findAll()
+      return successResponse(
+        context,
+        {
+          data: users,
+        },
+        StatusCodes.OK,
+      )
+    } catch (e) {
+      return errorResponse(
+        context,
+        {
+          error: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR),
+        },
+        StatusCodes.INTERNAL_SERVER_ERROR,
+      )
+    }
   }
 
   public async create(context: Context) {
@@ -78,24 +95,100 @@ class UserController {
     }
   }
 
-  public async update(ctx: Context) {
+  public async update(context: Context) {
     try {
-      await this.usersRepository.update(ctx.request.body, {
-        where: {id: ctx.params.id},
-        individualHooks: true,
-      })
-      ctx.body = 'OK'
+      let [affectedCount, data] = await this.usersRepository.update(
+        context.request.body,
+        {
+          where: {id: context.params.id},
+          individualHooks: true,
+          returning: true,
+        },
+      )
+
+      if (affectedCount === 0) {
+        throw new ResourceNotExistError('User does not exist')
+      }
+
+      return successResponse(
+        context,
+        {
+          data: data[0].serialize(),
+        },
+        StatusCodes.OK,
+      )
     } catch (e) {
-      ctx.body = 'ERROR'
+      if (e instanceof ResourceNotExistError) {
+        return errorResponse(
+          context,
+          {
+            error: e,
+          },
+          StatusCodes.NOT_FOUND,
+        )
+      }
+      if (e instanceof z.ZodError || e instanceof Error) {
+        return errorResponse(
+          context,
+          {
+            error: e,
+          },
+          StatusCodes.BAD_REQUEST,
+        )
+      }
+      return errorResponse(
+        context,
+        {
+          error: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR),
+        },
+        StatusCodes.INTERNAL_SERVER_ERROR,
+      )
     }
   }
 
-  public async delete(ctx: Context) {
+  public async delete(context: Context) {
     try {
-      await this.usersRepository.destroy({where: {id: ctx.params.id}})
-      ctx.body = 'OK'
+      let affectedCount = await this.usersRepository.destroy({
+        where: {id: context.params.id},
+      })
+
+      if (affectedCount === 0) {
+        throw new ResourceNotExistError('User does not exist')
+      }
+
+      return successResponse(
+        context,
+        {
+          data: {affectedCount},
+        },
+        StatusCodes.OK,
+      )
     } catch (e) {
-      ctx.body = 'ERROR'
+      if (e instanceof ResourceNotExistError) {
+        return errorResponse(
+          context,
+          {
+            error: e,
+          },
+          StatusCodes.NOT_FOUND,
+        )
+      }
+      if (e instanceof z.ZodError || e instanceof Error) {
+        return errorResponse(
+          context,
+          {
+            error: e,
+          },
+          StatusCodes.BAD_REQUEST,
+        )
+      }
+      return errorResponse(
+        context,
+        {
+          error: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR),
+        },
+        StatusCodes.INTERNAL_SERVER_ERROR,
+      )
     }
   }
 }
