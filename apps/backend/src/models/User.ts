@@ -4,33 +4,62 @@ import {
   Column,
   Table,
 } from 'sequelize-typescript'
-import {Length, IsEmail} from 'class-validator'
 import {Exclude} from 'class-transformer'
 import argon2 from 'argon2'
+import {z} from 'zod'
 
-import {ParanoidModel} from './base/ParanoidModel'
+import {
+  ParanoidModel,
+  ParanoidModelValidation,
+} from './base/ParanoidModel'
 
 @Table
 class User extends ParanoidModel {
   @Column
-  @Length(2, 50)
   name!: string
 
   @Column
-  @Length(4, 30)
-  @IsEmail()
   email!: string
 
   @Column
   @Exclude()
-  @Length(25, 100)
   password!: string
 
   @BeforeCreate
   @BeforeUpdate
-  static async hashPassword(instance: User) {
+  public static async hashPassword(instance: User) {
     instance.password = await argon2.hash(instance.password)
   }
 }
 
-export {User}
+class UserValidation {
+  /**
+   * Get current model validation rules
+   */
+  public static get rules() {
+    return {
+      password: z.string().regex(/^[a-zA-Z0-9]{3,30}$/),
+      password_confirmation: z.string(),
+      email: z.string().email(),
+      name: z.string().min(2).max(50),
+    }
+  }
+
+  /**
+   * Get current model validation rules schema
+   */
+  public static get rulesSchema() {
+    return z.object(UserValidation.rules)
+  }
+
+  /**
+   * Get full model (with its parent) validation rules schema
+   */
+  public static get fullRulesSchema() {
+    return ParanoidModelValidation.fullRulesSchema.merge(
+      UserValidation.rulesSchema,
+    )
+  }
+}
+
+export {User, UserValidation}

@@ -13,6 +13,17 @@
     },
     "dev": {
       "cache": false
+    },
+    "db:new-migration": {
+      "cache": false,
+      "dependsOn": ["^build"],
+      "outputs": ["apps/backend/database/migrations/**"]
+    },
+    "db:migrate": {
+      "cache": false
+    },
+    "db:rollback": {
+      "cache": false
     }
   }
 }
