@@ -8,12 +8,11 @@ import {
   Model,
   Default,
 } from 'sequelize-typescript'
-import {Exclude, Expose, instanceToPlain} from 'class-transformer'
+import {Expose, instanceToPlain} from 'class-transformer'
 import {z} from 'zod'
 
 import type {ClassTransformOptions} from 'class-transformer'
 
-@Exclude()
 class BaseModel extends Model {
   @Expose()
   @IsUUID(4)
