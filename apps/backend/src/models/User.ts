@@ -13,7 +13,7 @@ import {
   ParanoidModelValidation,
 } from './base/ParanoidModel'
 
-@Table
+@Table({paranoid: true})
 class User extends ParanoidModel {
   @Expose()
   @Column

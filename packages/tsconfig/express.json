@@ -4,10 +4,9 @@
   "extends": "./base.json",
   "compilerOptions": {
     "lib": ["DOM", "DOM.Iterable", "ES2021"],
-    "types": ["vitest/globals"],
+    "types": ["jest", "node"],
     "isolatedModules": true,
     "esModuleInterop": true,
-    "jsx": "react",
     "module": "ES2020",
     "moduleResolution": "node",
     "resolveJsonModule": true,

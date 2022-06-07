@@ -51,13 +51,13 @@ function successResponse<
 function checkIfErrorIsString(
   err: Error | z.ZodError | string,
 ): err is string {
-  return !(err instanceof z.ZodError || err instanceof z.ZodError)
+  return !(err instanceof z.ZodError || err instanceof Error)
 }
 
 function checkIfErrorIsZodError(
   err: Error | z.ZodError,
 ): err is z.ZodError {
-  return !(err instanceof z.ZodError)
+  return err instanceof z.ZodError
 }
 
 interface ErrorResponseParams {
@@ -68,7 +68,7 @@ function errorResponse(
   context: Context,
   params: ErrorResponseParams,
   httpStatus: StatusCodes = StatusCodes.INTERNAL_SERVER_ERROR,
-): Response {
+) {
   let {error} = params
 
   let body: Response
@@ -92,10 +92,7 @@ function errorResponse(
     }
   }
 
-  context.status = httpStatus
-  context.body = body
-
-  return body
+  context.throw(httpStatus, body)
 }
 
 export {successResponse, errorResponse}

@@ -11,6 +11,18 @@
     "lint": {
       "outputs": []
     },
+    "test": {
+      "dependsOn": ["^lint"],
+      "outputs": []
+    },
+    "test:watch": {
+      "dependsOn": ["^lint"],
+      "outputs": []
+    },
+    "test:coverage": {
+      "dependsOn": ["^lint"],
+      "outputs": ["coverage/**"]
+    },
     "dev": {
       "cache": false
     },
