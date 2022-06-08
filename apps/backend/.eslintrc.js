@@ -60,21 +60,6 @@ module.exports = {
             position: 'after',
           },
           {
-            pattern: '~/sessions/**',
-            group: 'internal',
-            position: 'after',
-          },
-          {
-            pattern: '~/components/**',
-            group: 'internal',
-            position: 'after',
-          },
-          {
-            pattern: '~/views/**',
-            group: 'internal',
-            position: 'after',
-          },
-          {
             pattern: '~/utils/**',
             group: 'internal',
             position: 'after',

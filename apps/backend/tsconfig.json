@@ -1,5 +1,11 @@
 {
   "extends": "tsconfig/express.json",
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules", "./cypress"]
+  "include": ["backend-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "exclude": ["node_modules", "./cypress"],
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "~/*": ["./src/*"]
+    },
+  }
 }

@@ -1,16 +1,25 @@
 {
   "private": true,
   "scripts": {
+    "postinstall": "rm -rf .git/hooks && git config core.hooksPath .git/hooks && simple-git-hooks install",
     "build": "turbo run build --parallel",
     "dev": "turbo run dev --parallel",
     "start": "turbo run start --parallel",
-    "lint": "turbo run lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "lint": "turbo run lint --parallel",
+    "test": "turbo run test --parallel",
+    "test:watch": "turbo run test:watch --parallel",
+    "test:coverage": "turbo run test:coverage --parallel",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "db:new-migration": "turbo run db:new-migration --filter=@cloudnotes/backend",
+    "db:migrate": "turbo run db:migrate --filter=@cloudnotes/backend",
+    "db:rollback": "turbo run db:rollback --filter=@cloudnotes/backend",
+    "db:reset": "turbo run db:reset --filter=@cloudnotes/backend"
   },
   "packageManager": "pnpm@7.1.7",
   "lint-staged": {
     "*.{ts,tsx,md,mdx,js,jsx}": [
-      "prettier --write"
+      "prettier --write",
+      "eslint --fix"
     ]
   },
   "simple-git-hooks": {

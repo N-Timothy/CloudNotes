@@ -11,7 +11,33 @@
     "lint": {
       "outputs": []
     },
+    "test": {
+      "dependsOn": ["^lint"],
+      "outputs": []
+    },
+    "test:watch": {
+      "dependsOn": ["^lint"],
+      "outputs": []
+    },
+    "test:coverage": {
+      "dependsOn": ["^lint"],
+      "outputs": ["coverage/**"]
+    },
     "dev": {
+      "cache": false
+    },
+    "db:new-migration": {
+      "cache": false,
+      "dependsOn": ["^build"],
+      "outputs": ["apps/backend/database/migrations/**"]
+    },
+    "db:migrate": {
+      "cache": false
+    },
+    "db:rollback": {
+      "cache": false
+    },
+    "db:reset": {
       "cache": false
     }
   }
