@@ -42,7 +42,6 @@ importers:
       argon2: ^0.28.5
       c8: ^7.11.3
       class-transformer: ^0.5.1
-      class-validator: ^0.13.2
       dotenv: ^16.0.1
       express: ^4.18.1
       http-errors: ^2.0.0
@@ -70,7 +69,6 @@ importers:
       '@koa/router': 10.1.1
       argon2: 0.28.5
       class-transformer: 0.5.1
-      class-validator: 0.13.2
       dotenv: 16.0.1
       express: 4.18.1
       http-errors: 2.0.0
@@ -2065,13 +2063,6 @@ packages:
 
   /class-transformer/0.5.1:
     resolution: {integrity: sha512-SQa1Ws6hUbfC98vKGxZH3KFY0Y1lm5Zm0SY8XX9zbK7FJCyVEac3ATW0RIpwzW+oOfmHE5PMPufDG9hCfoEOMw==}
-    dev: false
-
-  /class-validator/0.13.2:
-    resolution: {integrity: sha512-yBUcQy07FPlGzUjoLuUfIOXzgynnQPPruyK1Ge2B74k9ROwnle1E+NxLWnUv5OLU8hA/qL5leAE9XnXq3byaBw==}
-    dependencies:
-      libphonenumber-js: 1.10.6
-      validator: 13.7.0
     dev: false
 
   /clean-stack/2.2.0:
@@ -4311,10 +4302,6 @@ packages:
     dependencies:
       prelude-ls: 1.2.1
       type-check: 0.4.0
-
-  /libphonenumber-js/1.10.6:
-    resolution: {integrity: sha512-CIjT100/SmntsUjsLVs2t3ufeN4KdNXUxhD07tH153pdbaCWuAjv0jK/gPuywR3IImB/U/MQM+x9RfhMs5XZiA==}
-    dev: false
 
   /lilconfig/2.0.5:
     resolution: {integrity: sha512-xaYmXZtTHPAw5m+xLN8ab9C+3a8YmV3asNSPOATITbtwrfbwaLJj8h66H1WMIpALCkqsIzK3h7oQ+PdX+LQ9Eg==}

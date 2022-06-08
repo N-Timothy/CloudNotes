@@ -2,12 +2,13 @@ import Router from '@koa/router'
 
 import {User} from '~/models/User'
 
-import {sequelize} from '~/db'
+import {sequelize, setupDB} from '~/db'
 import {UserController} from '~/controllers/users'
 
 const USERS_PATH = '/users'
 
-function setup() {
+function usersRouter() {
+  setupDB()
   let router = new Router({prefix: USERS_PATH})
   let usersRepository = sequelize.getRepository(User)
   let controller = new UserController(usersRepository)
@@ -18,7 +19,5 @@ function setup() {
   router.delete('/:id', controller.delete.bind(controller))
   return router
 }
-
-const usersRouter = setup()
 
 export {usersRouter}

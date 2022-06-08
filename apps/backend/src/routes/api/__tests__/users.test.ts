@@ -12,7 +12,7 @@ describe('API users', () => {
   beforeAll(async () => {
     // await sequelize.drop()
     // await sequelize.sync({ force: true })
-    request = supertest(app.callback())
+    request = supertest(app().callback())
   })
 
   afterAll(async () => {
