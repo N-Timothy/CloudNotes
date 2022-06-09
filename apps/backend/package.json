@@ -29,7 +29,7 @@
     "db:new-migration": "pnpm run ts database/migrator.ts create",
     "db:migrate": "pnpm run ts database/migrator.ts up",
     "db:rollback": "pnpm run ts database/migrator.ts down",
-    "db:rollback:all": "pnpm run ts database/migrator.ts down --step 100",
+    "db:rollback:all": "pnpm run ts database/migrator.ts down --step 30",
     "db:reset": "pnpm run db:rollback:all && pnpm run db:migrate"
   },
   "dependencies": {
