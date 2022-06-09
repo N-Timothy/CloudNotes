@@ -6,13 +6,15 @@ import type {ApiRouterParams} from '~/types'
 
 import {AuthController} from '~/controllers/auth'
 
+const AUTH_PATH = '/auth'
+
 function authRouter({database}: ApiRouterParams) {
-  let router = new Router()
+  let router = new Router({prefix: AUTH_PATH})
   let usersRepository = database.getRepository(User)
   let controller = new AuthController(usersRepository)
 
-  router.post('/Login', controller.login.bind(controller))
-  router.post('/Register', controller.register.bind(controller))
+  router.post('/login', controller.login.bind(controller))
+  router.post('/register', controller.register.bind(controller))
   return router
 }
 

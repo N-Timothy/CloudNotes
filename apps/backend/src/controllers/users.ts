@@ -2,6 +2,7 @@ import {z} from 'zod'
 import {getReasonPhrase, StatusCodes} from 'http-status-codes'
 
 import type {User} from '~/models/User'
+import {refinePasswordConfirmationValidation} from '~/models/User'
 import {UserValidation} from '~/models/User'
 
 import {errorResponse, successResponse} from '~/utils/response'
@@ -11,18 +12,6 @@ import type {Repository} from 'sequelize-typescript'
 
 import {ResourceExistError} from '~/errors/resource-exist'
 import {ResourceNotExistError} from '~/errors/resource-not-exist'
-
-function refinePasswordConfirmationValidation(
-  schema: typeof UserValidation.rulesSchema,
-) {
-  return schema.refine(
-    data => data.password === data.password_confirmation,
-    {
-      message: "Passwords don't match",
-      path: ['password_confirmation'],
-    },
-  )
-}
 
 class UserController {
   public constructor(private usersRepository: Repository<User>) {}
@@ -97,6 +86,7 @@ class UserController {
 
   public async update(context: Context) {
     try {
+      UserValidation.rulesSchema.parseAsync(context.request.body)
       let [affectedCount, data] = await this.usersRepository.update(
         context.request.body,
         {

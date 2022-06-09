@@ -63,4 +63,16 @@ class UserValidation {
   }
 }
 
-export {User, UserValidation}
+function refinePasswordConfirmationValidation(
+  schema: typeof UserValidation.rulesSchema,
+) {
+  return schema.refine(
+    data => data.password === data.password_confirmation,
+    {
+      message: "Passwords don't match",
+      path: ['password_confirmation'],
+    },
+  )
+}
+
+export {User, UserValidation, refinePasswordConfirmationValidation}

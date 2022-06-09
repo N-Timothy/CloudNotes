@@ -50,6 +50,7 @@ describe('API users', () => {
         name: 'test2',
         email: 'test1@test.com',
         password: 'test123',
+        password_confirmation: 'test123',
       })
       expect(response.status).toBe(StatusCodes.OK)
       expect(response.body).toBeDefined()

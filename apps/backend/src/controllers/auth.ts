@@ -3,6 +3,8 @@ import {getReasonPhrase, StatusCodes} from 'http-status-codes'
 import argon2 from 'argon2'
 
 import type {User} from '~/models/User'
+import {UserValidation} from '~/models/User'
+import {refinePasswordConfirmationValidation} from '~/models/User'
 
 import {errorResponse, successResponse} from '~/utils/response'
 
@@ -65,6 +67,9 @@ class AuthController {
 
   public async register(context: Context) {
     try {
+      await refinePasswordConfirmationValidation(
+        UserValidation.rulesSchema,
+      ).parseAsync(context.request.body)
       let [data, created] = await this.userRepository.findOrCreate({
         where: {email: context.request.body.email},
         defaults: context.request.body,

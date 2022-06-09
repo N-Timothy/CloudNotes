@@ -6,14 +6,14 @@ import path from 'path'
 import {Sequelize} from 'sequelize-typescript'
 import {Umzug, SequelizeStorage} from 'umzug'
 
-import {sequelize, setupDB} from '~/db'
+import {setupDatabase} from '~/database'
 
-setupDB()
+let database = setupDatabase()
 
 const umzug = new Umzug({
   migrations: {glob: 'database/migrations/*.ts'},
-  context: {Sequelize, queryInterface: sequelize.getQueryInterface()},
-  storage: new SequelizeStorage({sequelize}),
+  context: {Sequelize, queryInterface: database.getQueryInterface()},
+  storage: new SequelizeStorage({sequelize: database}),
   logger: undefined,
   create: {
     folder: path.resolve('database', 'migrations'),
