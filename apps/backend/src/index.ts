@@ -7,7 +7,7 @@ import {z} from 'zod'
 
 import routesApi from './routes/api'
 import {env} from './env'
-import {setupDB} from './db'
+import {setupDatabase} from './database'
 
 const app = new Koa()
 
@@ -37,14 +37,14 @@ async function checkEnv() {
 async function start() {
   await checkEnv()
 
-  setupDB()
+  let database = setupDatabase()
 
   router.get('/', async ctx => {
     ctx.body = "Whatchu doin' here"
   })
 
   app.use(router.routes()).use(router.allowedMethods())
-  app.use(mount('/api', routesApi()))
+  app.use(mount('/api', routesApi({database})))
 
   app.listen(env.PORT, env.HOST, () => {
     console.log(`⚡️[server]: Server is running at ${env.DOMAIN}`)

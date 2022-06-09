@@ -11,7 +11,8 @@
   },
   "scripts": {
     "# general": "--------------------------------------------------------------------------------",
-    "ts": "node -r @swc-node/register",
+    "setup:env": "cp .env.example .env && cp .env.example.test .env.test",
+    "ts": "node -r @swc-node/register -r dotenv/config",
     "lint": "eslint **/*.{js,ts}",
     "# dev": "------------------------------------------------------------------------------------",
     "dev": "pm2-dev ./other/pm2.config.js",
@@ -25,10 +26,11 @@
     "test:watch": "jest --watch",
     "test:coverage": "jest --collect-coverage",
     "# db": "-------------------------------------------------------------------------------------",
-    "db:new-migration": "sequelize migration:create",
-    "db:migrate": "sequelize db:migrate",
-    "db:rollback": "sequelize db:migrate:undo",
-    "db:reset": "sequelize db:migrate:undo:all && sequelize db:migrate"
+    "db:new-migration": "pnpm run ts database/migrator.ts create",
+    "db:migrate": "pnpm run ts database/migrator.ts up",
+    "db:rollback": "pnpm run ts database/migrator.ts down",
+    "db:rollback:all": "pnpm run ts database/migrator.ts down --step 30",
+    "db:reset": "pnpm run db:rollback:all && pnpm run db:migrate"
   },
   "dependencies": {
     "@koa/cors": "^3.3.0",
@@ -49,7 +51,8 @@
     "sequelize": "^6.20.1",
     "sequelize-typescript": "^2.1.3",
     "tiny-invariant": "^1.2.0",
-    "zod": "^3.17.3"
+    "zod": "^3.17.3",
+    "umzug": "^3.1.1"
   },
   "devDependencies": {
     "@swc-node/register": "^1.5.1",
