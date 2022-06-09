@@ -2,13 +2,13 @@ import Router from '@koa/router'
 
 import {User} from '~/models/User'
 
-import {sequelize, setupDB} from '~/db'
+import type {ApiRouterParams} from '~/types'
+
 import {AuthController} from '~/controllers/auth'
 
-function authRouter() {
-  setupDB()
+function authRouter({database}: ApiRouterParams) {
   let router = new Router()
-  let usersRepository = sequelize.getRepository(User)
+  let usersRepository = database.getRepository(User)
   let controller = new AuthController(usersRepository)
 
   router.post('/Login', controller.login.bind(controller))

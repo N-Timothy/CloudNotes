@@ -1,10 +1,12 @@
 import Koa, {HttpError} from 'koa'
 import bodyparser from 'koa-bodyparser'
 
+import type {ApiRouterParams} from '~/types'
+
 import {usersRouter} from './users'
 import {authRouter} from './auth'
 
-function apiRouter() {
+function apiRouter(params: ApiRouterParams) {
   let app = new Koa()
 
   app.use(bodyparser())
@@ -23,8 +25,8 @@ function apiRouter() {
     }
   })
 
-  let usersApi = usersRouter()
-  let authApi = authRouter()
+  let usersApi = usersRouter(params)
+  let authApi = authRouter(params)
 
   app.use(usersApi.routes())
   app.use(authApi.routes())

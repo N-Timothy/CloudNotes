@@ -13,6 +13,7 @@ export default {
   clearMocks: true,
 
   collectCoverage: true,
+  collectCoverageFrom: ['src/**/*.ts', '!src/types/**.d.ts'],
 
   coverageDirectory: 'coverage',
 
@@ -22,7 +23,7 @@ export default {
     '^~/(.*)$': '<rootDir>/src/$1',
   },
 
-  setupFiles: ['dotenv/config'],
+  setupFiles: ['<rootDir>/other/setup-tests/env-setup.ts'],
 
   testTimeout: 2000,
 

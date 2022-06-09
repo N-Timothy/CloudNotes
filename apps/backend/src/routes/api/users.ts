@@ -2,15 +2,15 @@ import Router from '@koa/router'
 
 import {User} from '~/models/User'
 
-import {sequelize, setupDB} from '~/db'
+import type {ApiRouterParams} from '~/types'
+
 import {UserController} from '~/controllers/users'
 
 const USERS_PATH = '/users'
 
-function usersRouter() {
-  setupDB()
+function usersRouter({database}: ApiRouterParams) {
   let router = new Router({prefix: USERS_PATH})
-  let usersRepository = sequelize.getRepository(User)
+  let usersRepository = database.getRepository(User)
   let controller = new UserController(usersRepository)
 
   router.get('/', controller.getAll.bind(controller))
