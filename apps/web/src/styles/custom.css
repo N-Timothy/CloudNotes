@@ -1,0 +1,26 @@
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+    color: #c4c3ca;
+	background-color: #1f2029;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.app-title {
+  text-align: center;
+  margin-top: 5%;
+  font-size: 50px;
+}
+
+@import './components/login.css'
