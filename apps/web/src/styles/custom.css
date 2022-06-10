@@ -23,4 +23,4 @@ a {
   font-size: 50px;
 }
 
-@import './components/login.css'
+@import 'components/auth.css'
