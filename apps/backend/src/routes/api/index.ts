@@ -5,6 +5,7 @@ import type {ApiRouterParams} from '~/types'
 
 import {usersRouter} from './users'
 import {authRouter} from './auth'
+import {notesRouter} from './notes'
 
 function apiRouter(params: ApiRouterParams) {
   let app = new Koa()
@@ -27,11 +28,14 @@ function apiRouter(params: ApiRouterParams) {
 
   let usersApi = usersRouter(params)
   let authApi = authRouter(params)
+  let notesApi = notesRouter(params)
 
   app.use(usersApi.routes())
   app.use(authApi.routes())
+  app.use(notesApi.routes())
   app.use(usersApi.allowedMethods())
   app.use(authApi.allowedMethods())
+  app.use(notesApi.allowedMethods())
 
   return app
 }

@@ -1,32 +1,26 @@
 import {z} from 'zod'
 import {getReasonPhrase, StatusCodes} from 'http-status-codes'
 
-import type {User} from '~/models/User'
-import {refinePasswordConfirmationValidation} from '~/models/User'
-import {UserValidation} from '~/models/User'
+import type {Note} from '~/models/Note'
+import {NoteValidation} from '~/models/Note'
 
 import {errorResponse, successResponse} from '~/utils/response'
 
 import type {Context} from 'koa'
 import type {Repository} from 'sequelize-typescript'
 
-import {ResourceExistError} from '~/errors/resource-exist'
 import {ResourceNotExistError} from '~/errors/resource-not-exist'
 
-class UserController {
-  public constructor(private usersRepository: Repository<User>) {}
+class NoteController {
+  public constructor(private notesRepository: Repository<Note>) {}
 
   public async getAll(context: Context) {
     try {
-      let users = await this.usersRepository.findAll()
-      let data: any = []
-      users.forEach((x, index) => {
-        data[index] = users[index].serialize()
-      })
+      let notes = await this.notesRepository.findAll()
       return successResponse(
         context,
         {
-          data,
+          data: notes,
         },
         StatusCodes.OK,
       )
@@ -43,32 +37,23 @@ class UserController {
 
   public async create(context: Context) {
     try {
-      await refinePasswordConfirmationValidation(
-        UserValidation.rulesSchema,
-      ).parseAsync(context.request.body)
+      await NoteValidation.rulesSchema.parseAsync(
+        context.request.body,
+      )
 
-      let [data, created] = await this.usersRepository.findOrCreate({
-        where: {email: context.request.body.email},
-        defaults: context.request.body,
-      })
-
-      if (!created) {
-        throw new ResourceExistError('Email has already been taken')
-      }
+      let data = await this.notesRepository.create(
+        context.request.body,
+      )
 
       return successResponse(
         context,
         {
-          data: data.serialize(),
+          data,
         },
         StatusCodes.CREATED,
       )
     } catch (e) {
-      if (
-        e instanceof z.ZodError ||
-        e instanceof ResourceExistError ||
-        e instanceof Error
-      ) {
+      if (e instanceof z.ZodError || e instanceof Error) {
         return errorResponse(
           context,
           {
@@ -90,8 +75,8 @@ class UserController {
 
   public async update(context: Context) {
     try {
-      UserValidation.rulesSchema.parseAsync(context.request.body)
-      let [affectedCount, data] = await this.usersRepository.update(
+      NoteValidation.rulesSchema.parseAsync(context.request.body)
+      let [affectedCount, data] = await this.notesRepository.update(
         context.request.body,
         {
           where: {id: context.params.id},
@@ -101,7 +86,7 @@ class UserController {
       )
 
       if (affectedCount === 0) {
-        throw new ResourceNotExistError('User does not exist')
+        throw new ResourceNotExistError('Note does not exist')
       }
 
       return successResponse(
@@ -142,12 +127,12 @@ class UserController {
 
   public async delete(context: Context) {
     try {
-      let affectedCount = await this.usersRepository.destroy({
+      let affectedCount = await this.notesRepository.destroy({
         where: {id: context.params.id},
       })
 
       if (affectedCount === 0) {
-        throw new ResourceNotExistError('User does not exist')
+        throw new ResourceNotExistError('Note does not exist')
       }
 
       return successResponse(
@@ -187,4 +172,4 @@ class UserController {
   }
 }
 
-export {UserController}
+export {NoteController}
