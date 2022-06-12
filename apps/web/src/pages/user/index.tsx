@@ -17,41 +17,29 @@ function user() {
   if (!users) return <p>No profile data</p>
   return (
     <div>
-      {Object.entries(data).map(([key, value]) => {
-        if (key === 'data') {
-          return (
-            <div key={key}>
-              <h1>{key}</h1>
-              <div>
-                {Object.entries(value).map(([key2, value2]) => {
+      {Object.entries(data.data).map(([key, value]) => {
+        return (
+          <div key={key}>
+            <h1>{key}</h1>
+            <div>
+              {Object.entries(value).map(([key2, value2]) => {
+                if (
+                  key2 === 'id' ||
+                  key2 === 'name' ||
+                  key2 === 'email'
+                ) {
                   return (
                     <div key={key2}>
-                      <div style={{paddingTop: '20px'}}>
-                        {Object.entries(value2).map(
-                          ([key3, value3]) => {
-                            if (
-                              key3 === 'id' ||
-                              key3 === 'name' ||
-                              key3 === 'email'
-                            ) {
-                              return (
-                                <div key={key3}>
-                                  <h3>
-                                    {key3} : {value3}
-                                  </h3>
-                                </div>
-                              )
-                            }
-                          },
-                        )}
-                      </div>
+                      <h3>
+                        {key2} : {value2}
+                      </h3>
                     </div>
                   )
-                })}
-              </div>
+                }
+              })}
             </div>
-          )
-        }
+          </div>
+        )
       })}
     </div>
   )
