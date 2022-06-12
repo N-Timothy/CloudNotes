@@ -15,7 +15,6 @@ function login() {
       body: JSON.stringify(user),
     })
     let data = await res.json()
-    console.log(data)
   }
 
   return (
