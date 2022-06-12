@@ -23,11 +23,7 @@ function user() {
             <h1>{key}</h1>
             <div>
               {Object.entries(value).map(([key2, value2]) => {
-                if (
-                  key2 === 'id' ||
-                  key2 === 'name' ||
-                  key2 === 'email'
-                ) {
+                {
                   return (
                     <div key={key2}>
                       <h3>

@@ -132,9 +132,7 @@ function register() {
                 name="password"
                 required
               />
-              <div className="flex -mr-px">
-                <span className="flex items-center leading-normal bg-white rounded rounded-l-none border-0 px-3 whitespace-no-wrap text-gray-600"></span>
-              </div>
+              <div className="flex -mr-px"></div>
             </div>
           </div>
           <div>
@@ -166,9 +164,7 @@ function register() {
                 name="password_confirmation"
                 required
               />
-              <div className="flex -mr-px">
-                <span className="flex items-center leading-normal bg-white rounded rounded-l-none border-0 px-3 whitespace-no-wrap text-gray-600"></span>
-              </div>
+              <div className="flex -mr-px"></div>
             </div>
           </div>
           <div className="auth-button-placement">

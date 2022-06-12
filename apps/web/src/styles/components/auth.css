@@ -85,51 +85,36 @@
     @apply relative inline-block w-16 h-9;
 }
   
-  .slider {
+.slider {
     @apply absolute cursor-pointer;
     @apply top-0 bottom-0 left-0 right-0;
     @apply bg-[#ccc] duration-1000;    
 }
   
-  .slider:before {
+.slider:before {
     @apply absolute content-[""];
     @apply h-7 w-7 left-1 bottom-1;
     @apply bg-white duration-1000;
 }
   
-  input:checked + .slider {
+input:checked + .slider {
     @apply bg-[#2196F3];
 }
 
-  input:focus + .slider {
+input:focus + .slider {
     @apply shadow-sm shadow-[#2196F3];
 }
   
-  input:checked + .slider:before {
+input:checked + .slider:before {
     -webkit-transform: translateX(26px);
     -ms-transform: translateX(26px);
     transform: translateX(26px);
 }
   
-  .slider.round {
+.slider.round {
     @apply rounded-2xl;
 }
   
-  .slider.round:before {
+.slider.round:before {
     @apply rounded-full;
-}
-
-  .register-component {
-    @apply hidden;
-}
-
-  .register-component.in {
-    @apply duration-1000 inline;
-    @apply ease-in transition-all;
-    transform-style: preserve-3d;
-}
-
-  .register-component.out {
-    @apply duration-1000 hidden;
-    transform-style: preserve-3d;
 }
