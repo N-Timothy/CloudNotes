@@ -21,19 +21,7 @@ function user() {
         return (
           <div key={key}>
             <h1>{key}</h1>
-            <div>
-              {Object.entries(value).map(([key2, value2]) => {
-                {
-                  return (
-                    <div key={key2}>
-                      <h3>
-                        {key2} : {value2}
-                      </h3>
-                    </div>
-                  )
-                }
-              })}
-            </div>
+            <div>{JSON.stringify(value)}</div>
           </div>
         )
       })}
