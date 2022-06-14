@@ -4,8 +4,6 @@ body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-    color: #c4c3ca;
-	background-color: #1f2029;
 }
 
 a {
@@ -22,5 +20,3 @@ a {
   margin-top: 5%;
   font-size: 50px;
 }
-
-@import 'components/auth.css'

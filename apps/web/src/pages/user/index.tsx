@@ -1,27 +1,41 @@
+import {getCookie} from 'cookies-next'
 import {useEffect, useState} from 'react'
 
-function user() {
-  let [data, setData] = useState()
+type Response<T extends object = object> = {
+  data: T[]
+  errors: []
+}
+
+type User = {
+  name: string
+  email: string
+}
+
+function UserPage() {
+  let [data, setData] = useState<Response<User>>()
   let [isLoading, setLoading] = useState(false)
   useEffect(() => {
     setLoading(true)
-    fetch('http://localhost:3000/api/users')
+    fetch('http://localhost:3000/api/users', {
+      headers: {
+        Authorization: `Bearer ${getCookie('auth_token')}`,
+      },
+    })
       .then(res => res.json())
       .then(data => {
         setData(data)
         setLoading(false)
       })
   }, [])
-  let users: any = data
   if (isLoading) return <p>Loading...</p>
-  if (!users) return <p>No profile data</p>
+  if (!data) return <p>No profile data</p>
   return (
     <div>
-      {Object.entries(data.data).map(([key, value]) => {
+      {data.data.map((value, key) => {
         return (
           <div key={key}>
-            <h1>{key}</h1>
-            <div>{JSON.stringify(value)}</div>
+            <div>{value.email}</div>
+            <div> {value.name} </div>
           </div>
         )
       })}
@@ -29,4 +43,4 @@ function user() {
   )
 }
 
-export default user
+export default UserPage
