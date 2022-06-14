@@ -19,6 +19,10 @@ const up: MigrationFn<UmzugMigrationParams> = async ({context}) => {
     content: {
       type: Sequelize.STRING,
     },
+    user_id: {
+      type: Sequelize.UUID,
+      references: {model: 'Users', key: 'id'},
+    },
     ...addTimestamps({deletedAt: true}),
   })
 }

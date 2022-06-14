@@ -1,6 +1,9 @@
+import {env} from 'process'
+
 import {z} from 'zod'
 import {getReasonPhrase, StatusCodes} from 'http-status-codes'
 import argon2 from 'argon2'
+import jwt from 'jsonwebtoken'
 
 import type {User} from '~/models/User'
 import {UserValidation} from '~/models/User'
@@ -16,11 +19,11 @@ import {ResourceNotExistError} from '~/errors/resource-not-exist'
 import {PasswordNotMatch} from '~/errors/password-not-match'
 
 class AuthController {
-  public constructor(private userRepository: Repository<User>) {}
+  public constructor(private usersRepository: Repository<User>) {}
 
   public async login(context: Context) {
     try {
-      let data = await this.userRepository.findOne({
+      let data = await this.usersRepository.findOne({
         where: {email: context.request.body.email},
       })
 
@@ -36,10 +39,19 @@ class AuthController {
       if (!passwordMatch) {
         throw new PasswordNotMatch('Password does not match')
       }
+
       return successResponse(
         context,
         {
-          data: data.serialize(),
+          data: {
+            token: jwt.sign(
+              {
+                data: data.id,
+                exp: Math.floor(Date.now() / 1000) + 60 * 60,
+              },
+              `${env.JWT_SECRET}`,
+            ),
+          },
         },
         StatusCodes.OK,
       )
@@ -70,7 +82,8 @@ class AuthController {
       await refinePasswordConfirmationValidation(
         UserValidation.rulesSchema,
       ).parseAsync(context.request.body)
-      let [data, created] = await this.userRepository.findOrCreate({
+
+      let [data, created] = await this.usersRepository.findOrCreate({
         where: {email: context.request.body.email},
         defaults: context.request.body,
       })

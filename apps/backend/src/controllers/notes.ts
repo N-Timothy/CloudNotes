@@ -1,22 +1,38 @@
 import {z} from 'zod'
 import {getReasonPhrase, StatusCodes} from 'http-status-codes'
+import jwt from 'jsonwebtoken'
 
 import type {Note} from '~/models/Note'
 import {NoteValidation} from '~/models/Note'
 
 import {errorResponse, successResponse} from '~/utils/response'
 
+import type {JwtPayload} from 'jsonwebtoken'
 import type {Context} from 'koa'
 import type {Repository} from 'sequelize-typescript'
 
 import {ResourceNotExistError} from '~/errors/resource-not-exist'
+import {UnauthorizedChange} from '~/errors/unauthorized-change'
 
+async function getActiveUser(context: Context) {
+  let tokens = `${context.request.header.authorization}`
+  let token = tokens.split(' ')
+  if (token[0] != 'Bearer') {
+    throw new Error('Token is not valid')
+  }
+  let auth: JwtPayload = jwt.decode(`${token[1]}`)
+  return auth?.data
+}
 class NoteController {
   public constructor(private notesRepository: Repository<Note>) {}
 
   public async getAll(context: Context) {
     try {
-      let notes = await this.notesRepository.findAll()
+      let user_id = await getActiveUser(context)
+
+      let notes = await this.notesRepository.findAll({
+        where: {user_id},
+      })
       return successResponse(
         context,
         {
@@ -25,6 +41,15 @@ class NoteController {
         StatusCodes.OK,
       )
     } catch (e) {
+      if (e instanceof Error) {
+        return errorResponse(
+          context,
+          {
+            error: e,
+          },
+          StatusCodes.BAD_REQUEST,
+        )
+      }
       return errorResponse(
         context,
         {
@@ -37,6 +62,10 @@ class NoteController {
 
   public async create(context: Context) {
     try {
+      let user_id = await getActiveUser(context)
+
+      context.request.body['user_id'] = user_id
+
       await NoteValidation.rulesSchema.parseAsync(
         context.request.body,
       )
@@ -75,24 +104,36 @@ class NoteController {
 
   public async update(context: Context) {
     try {
+      let user_id = await getActiveUser(context)
+
+      let notes = await this.notesRepository.findOne({
+        where: {id: context.params.id},
+      })
+
+      if (notes?.user_id == null) {
+        throw new ResourceNotExistError('Note does not exist')
+      }
+
+      if (notes?.user_id != user_id) {
+        throw new UnauthorizedChange('Unauthorized change')
+      }
+
+      context.request.body['user_id'] = user_id
+
       NoteValidation.rulesSchema.parseAsync(context.request.body)
-      let [affectedCount, data] = await this.notesRepository.update(
+
+      let [, data] = await this.notesRepository.update(
         context.request.body,
         {
           where: {id: context.params.id},
-          individualHooks: true,
           returning: true,
         },
       )
 
-      if (affectedCount === 0) {
-        throw new ResourceNotExistError('Note does not exist')
-      }
-
       return successResponse(
         context,
         {
-          data: data[0].serialize(),
+          data: data[0],
         },
         StatusCodes.OK,
       )
@@ -104,6 +145,15 @@ class NoteController {
             error: e,
           },
           StatusCodes.NOT_FOUND,
+        )
+      }
+      if (e instanceof UnauthorizedChange) {
+        return errorResponse(
+          context,
+          {
+            error: e,
+          },
+          StatusCodes.UNAUTHORIZED,
         )
       }
       if (e instanceof z.ZodError || e instanceof Error) {
@@ -127,13 +177,23 @@ class NoteController {
 
   public async delete(context: Context) {
     try {
-      let affectedCount = await this.notesRepository.destroy({
+      let user_id = await getActiveUser(context)
+
+      let notes = await this.notesRepository.findOne({
         where: {id: context.params.id},
       })
 
-      if (affectedCount === 0) {
+      if (notes?.user_id == null) {
         throw new ResourceNotExistError('Note does not exist')
       }
+
+      if (notes?.user_id != user_id) {
+        throw new UnauthorizedChange('Unauthorized change')
+      }
+
+      let affectedCount = await this.notesRepository.destroy({
+        where: {id: context.params.id},
+      })
 
       return successResponse(
         context,
@@ -150,6 +210,15 @@ class NoteController {
             error: e,
           },
           StatusCodes.NOT_FOUND,
+        )
+      }
+      if (e instanceof UnauthorizedChange) {
+        return errorResponse(
+          context,
+          {
+            error: e,
+          },
+          StatusCodes.UNAUTHORIZED,
         )
       }
       if (e instanceof z.ZodError || e instanceof Error) {

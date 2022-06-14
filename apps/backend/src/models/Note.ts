@@ -16,6 +16,10 @@ class Note extends ParanoidModel {
   @Expose()
   @Column
   content!: string
+
+  @Expose()
+  @Column
+  user_id!: string
 }
 
 class NoteValidation {
@@ -26,6 +30,7 @@ class NoteValidation {
     return {
       title: z.string().min(2).max(30),
       content: z.string(),
+      user_id: z.string(),
     }
   }
 

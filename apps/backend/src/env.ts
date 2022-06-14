@@ -19,6 +19,7 @@ class Environment {
       HTTPS: z.boolean(),
       DOMAIN: z.string().url(),
       DATABASE_URL: z.string().url(),
+      JWT_SECRET: z.string(),
     })
   }
 
@@ -54,6 +55,12 @@ class Environment {
    * Database URL
    */
   public DATABASE_URL = process.env.DATABASE_URL as string
+
+  /**
+   * Json Web Token Secret
+   */
+
+  public JWT_SECRET = process.env.JWT_SECRET ?? 'jwt-secret'
 
   private toNumber(value: string | undefined, def: number) {
     let val = value ? parseInt(value, 10) : def

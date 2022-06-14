@@ -1,5 +1,8 @@
+import {env} from 'process'
+
 import Koa, {HttpError} from 'koa'
 import bodyparser from 'koa-bodyparser'
+import jwt from 'koa-jwt'
 
 import type {ApiRouterParams} from '~/types'
 
@@ -30,11 +33,14 @@ function apiRouter(params: ApiRouterParams) {
   let authApi = authRouter(params)
   let notesApi = notesRouter(params)
 
-  app.use(usersApi.routes())
   app.use(authApi.routes())
+  app.use(authApi.allowedMethods())
+
+  app.use(jwt({secret: `${env.JWT_SECRET}`}))
+
+  app.use(usersApi.routes())
   app.use(notesApi.routes())
   app.use(usersApi.allowedMethods())
-  app.use(authApi.allowedMethods())
   app.use(notesApi.allowedMethods())
 
   return app
