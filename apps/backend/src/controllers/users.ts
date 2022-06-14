@@ -177,6 +177,8 @@ class UserController {
 
   public async delete(context: Context) {
     try {
+      await validateJsonWebToken(context)
+
       let affectedCount = await this.usersRepository.destroy({
         where: {id: context.params.id},
       })
