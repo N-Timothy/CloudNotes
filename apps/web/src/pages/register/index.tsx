@@ -5,7 +5,7 @@ type User = {
   password_confirmation: string
 }
 
-function Register() {
+function RegisterPage() {
   async function handleRegister(e: any) {
     e.preventDefault()
     let user: User = {
@@ -103,4 +103,4 @@ function Register() {
   )
 }
 
-export default Register
+export default RegisterPage

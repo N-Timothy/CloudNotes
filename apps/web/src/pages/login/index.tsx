@@ -1,6 +1,6 @@
 import {setCookies} from 'cookies-next'
 
-function Login() {
+function LoginPage() {
   async function handleLogin(e: any) {
     e.preventDefault()
 
@@ -81,4 +81,4 @@ function Login() {
   )
 }
 
-export default Login
+export default LoginPage
