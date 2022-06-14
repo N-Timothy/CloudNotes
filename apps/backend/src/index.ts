@@ -4,12 +4,14 @@ import Koa from 'koa'
 import Router from '@koa/router'
 import mount from 'koa-mount'
 import {z} from 'zod'
+import cors from '@koa/cors'
 
 import routesApi from './routes/api'
 import {env} from './env'
 import {setupDB} from './db'
 
 const app = new Koa()
+app.use(cors())
 
 const router = new Router()
 

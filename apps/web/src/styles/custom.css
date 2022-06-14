@@ -14,3 +14,9 @@ a {
 * {
   box-sizing: border-box;
 }
+
+.app-title {
+  text-align: center;
+  margin-top: 5%;
+  font-size: 50px;
+}
