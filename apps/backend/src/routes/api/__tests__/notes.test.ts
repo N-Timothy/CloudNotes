@@ -64,6 +64,13 @@ describe('API notes', () => {
       expect(response.body).toBeDefined()
       noteId = response.body.data.id
     })
+    test('GET /notes/:id (get single note)', async () => {
+      let response = await request
+        .get(`/notes/${noteId}`)
+        .set('Authorization', `Bearer ${token}`)
+      expect(response.status).toBe(StatusCodes.OK)
+      expect(response.body).toBeDefined()
+    })
     test('PUT /notes/:id (update note)', async () => {
       let response = await request
         .put(`/notes/${noteId}`)
@@ -134,6 +141,13 @@ describe('API notes', () => {
         })
         .set('Authorization', `Bearer ${token}`)
       expect(response.status).toBe(StatusCodes.BAD_REQUEST)
+      expect(response.body).toBeDefined()
+    })
+    test('GET /notes/:id (get single note)', async () => {
+      let response = await request
+        .get(`/notes/${noteId2}`)
+        .set('Authorization', `Bearer ${token2}`)
+      expect(response.status).toBe(StatusCodes.UNAUTHORIZED)
       expect(response.body).toBeDefined()
     })
     test('PUT /notes/:id (update note)', async () => {

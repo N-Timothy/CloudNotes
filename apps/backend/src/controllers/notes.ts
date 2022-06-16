@@ -60,6 +60,54 @@ class NoteController {
     }
   }
 
+  public async getOne(context: Context) {
+    try {
+      let user_id = await getActiveUser(context)
+
+      let notes = await this.notesRepository.findOne({
+        where: {id: context.params.id, user_id},
+      })
+
+      if (notes == null) {
+        throw new UnauthorizedChange('Unauthorized change')
+      }
+
+      return successResponse(
+        context,
+        {
+          data: notes,
+        },
+        StatusCodes.OK,
+      )
+    } catch (e) {
+      if (e instanceof UnauthorizedChange) {
+        return errorResponse(
+          context,
+          {
+            error: e,
+          },
+          StatusCodes.UNAUTHORIZED,
+        )
+      }
+      if (e instanceof Error) {
+        return errorResponse(
+          context,
+          {
+            error: e,
+          },
+          StatusCodes.BAD_REQUEST,
+        )
+      }
+      return errorResponse(
+        context,
+        {
+          error: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR),
+        },
+        StatusCodes.INTERNAL_SERVER_ERROR,
+      )
+    }
+  }
+
   public async create(context: Context) {
     try {
       let user_id = await getActiveUser(context)
